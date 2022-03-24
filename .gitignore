@@ -1,0 +1,7 @@
+# dependencies
+/node_modules
+
+# misc
+/not_needed
+.env.development
+.env

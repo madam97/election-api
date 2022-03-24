@@ -1,0 +1,16 @@
+{
+  "extends": "@tsconfig/node16/tsconfig.json",
+  "compilerOptions": {
+    "outDir": "dist",
+    "strictPropertyInitialization": false,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "typeRoots" : ["@types", "node_modules/@types"]
+  },
+  "include": [
+    "src/index.ts"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
+}
