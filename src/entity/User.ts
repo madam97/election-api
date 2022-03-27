@@ -31,7 +31,10 @@ export class User {
   })
   lastLogin: Date;
   
-  @CreateDateColumn()
+  @CreateDateColumn({
+    insert: false,
+    update: false
+  })
   createdAt: Date;
 
   @ManyToOne(() => District, (district) => district.users)

@@ -10,16 +10,24 @@ export class Party {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
+  @Column({
+    unique: true
+  })
   name: string;
 
   @Column()
   website: string;
 
-  @CreateDateColumn()
+  @CreateDateColumn({
+    insert: false,
+    update: false
+  })
   createdAt: Date;
 
-  @UpdateDateColumn()
+  @UpdateDateColumn({
+    insert: false,
+    update: false
+  })
   updatedAt: Date;
 
   @OneToMany(() => Candidate, (candidate) => candidate.party)

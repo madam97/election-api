@@ -28,10 +28,16 @@ export class Candidate {
   @Column()
   education: string;
 
-  @CreateDateColumn()
+  @CreateDateColumn({
+    insert: false,
+    update: false
+  })
   createdAt: Date;
 
-  @UpdateDateColumn()
+  @UpdateDateColumn({
+    insert: false,
+    update: false
+  })
   updatedAt: Date;
 
   @ManyToOne(() => Party, (party) => party.candidates)

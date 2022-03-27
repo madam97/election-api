@@ -11,7 +11,10 @@ export class Vote {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @CreateDateColumn()
+  @CreateDateColumn({
+    insert: false,
+    update: false
+  })
   createdAt: Date;
 
   @OneToOne(() => User, (user) => user.vote)
