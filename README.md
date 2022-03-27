@@ -27,12 +27,12 @@ candidateId int FK >- candidates.id
 districts
 ----------
 id int PK
-name varchar(255)
+name UNIQUE varchar(255)
 
 parties
 ----------
 id int PK
-name varchar(255)
+name UNIQUE varchar(255)
 website varchar(255)
 createdAt date
 updatedAt date
