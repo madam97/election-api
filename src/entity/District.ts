@@ -15,6 +15,8 @@ export class District {
   })
   name: string;
 
+  // ---------------------------------------
+
   @OneToMany(() => User, (user) => user.district)
   users: User[];
 

@@ -23,24 +23,35 @@ export class User {
   })
   email: string;
   
-  @Column()
+  @Column({
+    name: 'birth_year'
+  })
   birthYear: number;
   
   @Column({
-    type: 'timestamp'
+    name: 'last_login',
+    type: 'timestamp',
+    default: 'NOW()'
   })
   lastLogin: Date;
   
   @CreateDateColumn({
+    name: 'created_at',
     insert: false,
     update: false
   })
   createdAt: Date;
 
-  @ManyToOne(() => District, (district) => district.users)
+  // ---------------------------------------
+
+  @ManyToOne(() => District, (district) => district.users, {
+    nullable: false
+  })
+  @JoinColumn({
+    name: 'district_id'
+  })
   district: District;
 
   @OneToOne(() => Vote, (vote) => vote.user)
-  @JoinColumn()
   vote: Vote;
 }

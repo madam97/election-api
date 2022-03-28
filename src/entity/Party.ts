@@ -19,16 +19,20 @@ export class Party {
   website: string;
 
   @CreateDateColumn({
+    name: 'created_at',
     insert: false,
     update: false
   })
   createdAt: Date;
 
   @UpdateDateColumn({
+    name: 'updated_at',
     insert: false,
     update: false
   })
   updatedAt: Date;
+
+  // ---------------------------------------
 
   @OneToMany(() => Candidate, (candidate) => candidate.party)
   candidates: Candidate[];
