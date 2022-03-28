@@ -4,7 +4,8 @@ import { dbConfig } from './config';
 import { Candidate } from './entity/Candidate';
 import { District } from './entity/District';
 import { Party } from './entity/Party';
-import { User } from './entity/User';
+import { Citizen } from './entity/Citizen';
+import { VotingCitizen } from './entity/VotingCitizen';
 import { Vote } from './entity/Vote';
 
 export const AppDataSource = new DataSource({
@@ -16,7 +17,7 @@ export const AppDataSource = new DataSource({
   database      : dbConfig.database,
   synchronize   : true,
   logging       : true,
-  entities      : [User, Candidate, District, Party, Vote],
+  entities      : [Candidate, District, Party, Citizen, VotingCitizen, Vote],
   subscribers   : [],
   migrations    : [],
 });
