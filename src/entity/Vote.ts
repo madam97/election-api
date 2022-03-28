@@ -2,12 +2,12 @@ import { CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToOne, PrimaryGener
 import { dbConfig } from '../config';
 import { Candidate } from './Candidate';
 import { Party } from './Party';
-import { User } from './User';
+import { VotingCitizen } from './VotingCitizen';
 
 @Entity({
   name: dbConfig.tablePrefix+'votes'
 })
-@Unique('one_user_vote_once', ['user', 'party', 'candidate'])
+@Unique('one_votingCitizen_vote_once', ['votingCitizen', 'party', 'candidate'])
 export class Vote {
   @PrimaryGeneratedColumn()
   id: number;
@@ -21,13 +21,13 @@ export class Vote {
 
   // ---------------------------------------
 
-  @OneToOne(() => User, (user) => user.vote, {
+  @OneToOne(() => VotingCitizen, (votingCitizen) => votingCitizen.vote, {
     nullable: false
   })
   @JoinColumn({
-    name: 'user_id'
+    name: 'voting_citizen_id'
   })
-  user: User;
+  votingCitizen: VotingCitizen;
 
   @ManyToOne(() => Party, (party) => party.votes, {
     nullable: false
