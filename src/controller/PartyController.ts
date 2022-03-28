@@ -50,12 +50,14 @@ class PartyController extends Controller {
   }
 
   private async post(body: IObject) {
+    delete body.id;
+
     const party = partyRepository.create(body);
 
     return await partyRepository.save(party);
   }
 
-  private async put(id: number, body: IObject) {
+  private async put(id: number, body: object) {
     await partyRepository.update(id, { ...body, id });
 
     return await this.getOne(id);

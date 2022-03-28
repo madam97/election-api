@@ -50,7 +50,7 @@ class DistrictController extends Controller {
   }
 
   private async post(body: IObject) {
-    body.id = null;
+    delete body.id;
 
     const district = districtRepository.create(body);
 
