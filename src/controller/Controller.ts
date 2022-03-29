@@ -1,6 +1,9 @@
 import express from 'express';
-import { auth, TAuthRole } from '../services/Auth';
+import { validate } from 'class-validator';
+import { auth, TAuthRole } from '../service/Auth';
 import TMethod from '../types/TMethod';
+import IObject from '../interfaces/IObject';
+import { HTTPError } from '../errors';
 
 export interface Route {
   method: TMethod,
@@ -200,9 +203,42 @@ export class Controller {
 
       res.json( await route.func(...args) );
     } catch (err) {
-      res.status(404).json({
-        msg: err instanceof Error ? err.message : 'unknown error'
-      });
+      const data: IObject = {
+        code: 404,
+        msg: 'unknown error',
+        info: undefined
+      };
+
+      if (err instanceof HTTPError) {
+        data.msg = err.message;
+        data.info = err.info;
+      } else if (err instanceof Error) {
+        data.msg = err.message;
+      }
+
+      res.status(data.code).json(data);
+    }
+  }
+
+
+
+  /// VALIDATION
+
+  /**
+   * Runs the class-validator on the given entity
+   * @param entity 
+   */
+  protected async validate(entity: any): Promise<void> {
+    const errors = await validate(entity, { validationError: { target: false } });
+
+    if (errors.length > 0) {
+      const errorsObject: IObject = {};
+
+      for (const error of errors) {
+        errorsObject[ error.property ] = error.constraints;
+      }
+
+      throw new HTTPError('validation error', 404, errorsObject); 
     }
   }
 
