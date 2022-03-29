@@ -1,7 +1,8 @@
 import { IsDate, IsEmail, IsJWT, IsOptional, IsString } from 'class-validator';
-import { Column, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { dbConfig } from '../config';
 import { Citizen } from './Citizen';
+import { District } from './District';
 import { Vote } from './Vote';
 
 @Entity({
@@ -46,6 +47,14 @@ export class VotingCitizen {
     name: 'citizen_id'
   })
   citizen: Citizen;
+
+  @ManyToOne(() => District, {
+    nullable: false
+  })
+  @JoinColumn({
+    name: 'district_id'
+  })
+  district: District;
 
   @OneToOne(() => Vote, (vote) => vote.votingCitizen)
   vote: Vote;

@@ -2,7 +2,6 @@ import { Controller } from './Controller';
 import { citizenRepository } from '../repository/CitizenRepository';
 import { votingCitizenRepository } from '../repository/VotingCitizenRepository';
 import IObject from '../interfaces/IObject';
-import { HTTPError } from '../errors';
 import { VotingCitizen } from '../entity/VotingCitizen';
 import { auth } from '../service/Auth';
 import { Citizen } from '../entity/Citizen';
@@ -42,7 +41,7 @@ class AuthController extends Controller {
         lastname: citizen.lastname,
         birthDate: citizen.birthDate
       },
-      relations: ['votingCitizen']
+      relations: ['district', 'votingCitizen']
     });
 
     if (!savedCitizen) {
@@ -56,12 +55,13 @@ class AuthController extends Controller {
 
   private async postRegister(body: IObject): Promise<VotingCitizen> {
     body.citizen = await this.postCitizenValidate(body);
+    body.district = body.citizen.district;
 
     const votingCitizen = await votingCitizenRepository.createHashed(body);
 
     await this.validate(votingCitizen);
 
-    votingCitizenRepository.save(votingCitizen);
+    await votingCitizenRepository.save(votingCitizen);
 
     return votingCitizen;
   }
@@ -92,7 +92,8 @@ class AuthController extends Controller {
       name,
       token: auth.getToken({
         id: votingCitizen.id,
-        name
+        name,
+        role: 'voting-citizen'
       })
     }
   }

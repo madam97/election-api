@@ -1,6 +1,7 @@
 import express from 'express';
 import { validate } from 'class-validator';
 import { auth, TAuthRole } from '../service/Auth';
+import { votingCitizenRepository } from '../repository/VotingCitizenRepository';
 import TMethod from '../types/TMethod';
 import IObject from '../interfaces/IObject';
 import { HTTPError } from '../errors';
@@ -109,7 +110,7 @@ export class Controller {
     }
 
     if (!route.role) {
-      route.role = route.verifyUserId ? 'user' : 'guest';
+      route.role = route.verifyUserId ? 'voting-citizen' : 'guest';
     }
 
     // if (!route.func) {
@@ -135,7 +136,7 @@ export class Controller {
    * @param res 
    * @param next 
    */
-  protected verifyAuth(req: express.Request, res: express.Response, next: express.NextFunction): void {
+  protected async verifyAuth(req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> {
     try {
       const payload = auth.verifyAuth(req.headers);
       const route = this.getRoute(req.method, req.route.path);
@@ -143,7 +144,10 @@ export class Controller {
       auth.verifyRole(route.role, payload.user.role);
 
       req.route = route;
-      req.user = payload.user;
+      req.user = await votingCitizenRepository.findOne({
+        where: { id: payload.user.id },
+        relations: ['citizen', 'district']
+      });
 
       next();
     } catch (err) {
@@ -197,8 +201,11 @@ export class Controller {
       if (route.params) {
         route.params.map(param => args.push( parseInt(req.params[param]) ));
       }
-      if (req.body) {
+      if (['POST', 'PUT', 'PATCH'].includes(req.method)) {
         args.push(req.body);
+      }
+      if (route.role !== 'guest') {
+        args.push(req.user);
       }
 
       res.json( await route.func(...args) );

@@ -3,7 +3,7 @@ import bcrypt from 'bcrypt';
 import { authConfig } from '../config';
 import IObject from '../interfaces/IObject';
 
-export type TAuthRole = 'guest' | 'user' | 'admin';
+export type TAuthRole = 'guest' | 'voting-citizen' | 'admin';
 
 export interface AuthUser {
   id: number,
