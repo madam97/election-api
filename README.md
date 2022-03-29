@@ -36,6 +36,11 @@ The base uri is **/api**
 | POST    | /auth/citizen-validate    | Check if the given citizen's data is valid and have not registered yet |
 | POST    | /auth/register            | Generates a new voting citizen with token |
 | POST    | /auth/login               | Logins the voting citizen by using token and password |
+| **Voting**                                                           |
+| GET     | /vote/candidates          | List all the candidates of the logged in voting citizen's district |
+| GET     | /vote/parties             | List all the parties           |
+| POST    | /vote                     | Adds a new vote                |
+| GET     | /vote/citizen             | Gets the vote of the logged in voting citizen |
 
 ## Database schema
 
