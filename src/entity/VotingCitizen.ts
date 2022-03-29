@@ -1,7 +1,7 @@
-import { Column, Entity, JoinColumn, ManyToOne, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { IsDate, IsEmail, IsJWT, IsOptional, IsString } from 'class-validator';
+import { Column, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { dbConfig } from '../config';
 import { Citizen } from './Citizen';
-import { District } from './District';
 import { Vote } from './Vote';
 
 @Entity({
@@ -12,23 +12,29 @@ export class VotingCitizen {
   id: number; 
 
   @Column({
-    unique: true
+    unique: true,
+    update: false
   })
-  token: string;
+  @IsJWT()
+  refreshToken: string;
 
   @Column()
+  @IsString()
   password: string;
   
   @Column({
     unique: true
   })
+  @IsEmail()
   email: string;
   
   @Column({
     name: 'last_login',
     type: 'timestamp',
-    default: () => 'NOW()'
+    nullable: true
   })
+  @IsOptional()
+  @IsDate()
   lastLogin: Date;
 
   // ---------------------------------------
@@ -37,7 +43,7 @@ export class VotingCitizen {
     nullable: false
   })
   @JoinColumn({
-    name: 'voting_citizen_id'
+    name: 'citizen_id'
   })
   citizen: Citizen;
 

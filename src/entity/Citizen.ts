@@ -1,4 +1,5 @@
-import { Column, Entity, JoinColumn, ManyToOne, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, Index, JoinColumn, ManyToOne, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { IsDateString, IsString, Matches } from 'class-validator';
 import { dbConfig } from '../config';
 import { District } from './District';
 import { VotingCitizen } from './VotingCitizen';
@@ -12,21 +13,29 @@ export class Citizen {
 
   @Column({
     type: 'varchar',
-    length: 8,
+    length: 8
+  })
+  @Index({
     unique: true
+  })
+  @Matches(/[A-Z]{2}[0-9]{6}/, {
+    message: '$property must follow the XX000000 format'
   })
   identityNumber: string;
 
   @Column()
+  @IsString()
   firstname: string;
 
   @Column()
+  @IsString()
   lastname: string;
 
   @Column({
     name: 'birth_date',
     type: 'date'
   })
+  @IsDateString()
   birthDate: string;
 
   // ---------------------------------------
