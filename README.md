@@ -32,6 +32,10 @@ The base uri is **/api**
 | **Test**                                                             |
 | GET     | /test/citizen             | Gets all the test citizen data |
 | POST    | /test/citizen/generate    | Generates a new test citizen   |
+| **Authorization**                                                    |
+| POST    | /auth/citizen-validate    | Check if the given citizen's data is valid and have not registered yet |
+| POST    | /auth/register            | Generates a new voting citizen with token |
+| POST    | /auth/login               | Logins the voting citizen by using token and password |
 
 ## Database schema
 
